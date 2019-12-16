@@ -9,11 +9,9 @@ library(scales)
 library(tibbletime)
 
 
-
  tickers<-GetIbovStocks(do.cache = FALSE) %>%
   select(tickers) %>%
   mutate(tickers = paste0(tickers,".SA")) %>%
-   slice(1:5) %>% 
   pull()
 
  acoes<-BatchGetSymbols(tickers = tickers,
@@ -125,7 +123,10 @@ server <- function(input, output, session) {
       -1 %>% 
       round(digits = 5) %>% 
       percent() %>% 
-      valueBox(icon = icon("chart-bar"),subtitle = "Retorno Acumulado no Ano")
+      valueBox(icon = icon("chart-bar"),
+               subtitle = "Retorno Acumulado no Ano",
+               color = case_when(. > 0 ~ "green",
+                                 TRUE ~ "red"))
   })
   
   output$dist_mm50<-renderValueBox({
@@ -141,7 +142,11 @@ server <- function(input, output, session) {
       select(diferenca) %>% 
       pull() %>% 
       percent() %>%
-      valueBox(icon = icon("chart-bar"),subtitle = "Distância Média Móvel 50 dias")
+      valueBox(icon = icon("chart-bar"),
+               subtitle = "Distância Média Móvel 50 dias",
+               color = case_when(. > 0 ~ "green",
+                                 TRUE ~ "red")
+                 )
     
     
     
@@ -161,7 +166,11 @@ server <- function(input, output, session) {
       select(diferenca) %>% 
       pull() %>% 
       percent() %>%
-      valueBox(icon = icon("chart-bar"),subtitle = "Distância Média Móvel 200 dias")
+      valueBox(icon = icon("chart-bar"),
+               subtitle = "Distância Média Móvel 200 dias",
+               color = case_when(. > 0 ~ "green",
+                                 TRUE ~ "red")
+               )
     
     
     
